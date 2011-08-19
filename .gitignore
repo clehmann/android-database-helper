@@ -1,0 +1,9 @@
+target
+*.iws
+*.iml
+.DS_Store
+.svn
+**/**/.svn
+bin
+gen/*
+*.iml
