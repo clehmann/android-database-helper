@@ -16,7 +16,7 @@ public class Table {
     private String name;
 
     private final String COLUMN_DEFINITION_SEPERATOR = ", ";
-    private DatabaseHelper databaseHelper;
+    protected DatabaseHelper databaseHelper;
     private Context context;
     private static final String LOGTAG = "Table";
 
@@ -82,4 +82,6 @@ public class Table {
         context.getContentResolver().notifyChange(uri, null);
         return numUpdated;
     }
+
+
 }
