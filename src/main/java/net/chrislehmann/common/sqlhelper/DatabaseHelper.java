@@ -9,8 +9,6 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 
-
-
     java.util.List<net.chrislehmann.common.sqlhelper.Table> tables = new java.util.ArrayList<net.chrislehmann.common.sqlhelper.Table>();
     private static final String LOGTAG = DatabaseHelper.class.getSimpleName();
 
@@ -29,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d(LOGTAG, "Creating Database");
         for (Table table : tables) {
-            Log.d(LOGTAG, "Creating table " +  table.getName());
+            Log.d(LOGTAG, "Creating table " + table.getName());
             Log.d(LOGTAG, "Calling beforeCreate");
             table.beforeCreate(db);
 
@@ -45,5 +43,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(LOGTAG, "Upgrading Database");
+
+        //TODO - This obviously needs to be better than this...
+        if (oldVersion < newVersion) {
+            Log.d(LOGTAG, "Dropping old tables");
+            for (Table table : tables) {
+                String sql = String.format("drop table %s", table.getName());
+                db.execSQL(sql);
+            }
+            onCreate(db);
+        }
+
     }
 }
