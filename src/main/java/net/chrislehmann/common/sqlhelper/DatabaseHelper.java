@@ -1,6 +1,7 @@
 package net.chrislehmann.common.sqlhelper;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -33,7 +34,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             Log.d(LOGTAG, "Creating table");
             Log.d(LOGTAG, table.getCreateString());
-            db.execSQL(table.getCreateString());
+            try {
+                db.execSQL(table.getCreateString());
+            } catch (SQLException e) {
+                Log.e(LOGTAG, "Could not create table " + table.getName(), e);
+            }
 
             Log.d(LOGTAG, "Calling afterCreate");
             table.afterCreate(db);
@@ -46,10 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //TODO - This obviously needs to be better than this...
         if (oldVersion < newVersion) {
-            Log.d(LOGTAG, "Dropping old tables");
-            for (Table table : tables) {
-                String sql = String.format("drop table %s", table.getName());
-                db.execSQL(sql);
+            try {
+                Log.d(LOGTAG, "Dropping old tables");
+                for (Table table : tables) {
+                    String sql = String.format("drop table %s", table.getName());
+                    db.execSQL(sql);
+                }
+            } catch (SQLException e) {
+                Log.e(LOGTAG, "Error dropping tables.", e);
             }
             onCreate(db);
         }
