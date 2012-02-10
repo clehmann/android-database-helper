@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>net.chrislehmann</groupId>
+    <artifactId>android-database-helper-parent</artifactId>
+    <version>1</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent> 
+  <groupId>net.chrislehmann</groupId>
+  <artifactId>android-database-helper-it</artifactId>
+  <version>${version}</version>
+  <packaging>apk</packaging>
+  <name>android-database-helper - Integration tests</name>
+
+  <dependencies>
+    <dependency> 
+      <groupId>com.google.android</groupId> 
+      <artifactId>android</artifactId> 
+      <version>${android.version}</version>
+      <scope>provided</scope>
+    </dependency> 
+    <dependency> 
+      <groupId>com.google.android</groupId> 
+      <artifactId>android-test</artifactId> 
+      <version>${android.version}</version>
+      <scope>provided</scope>
+    </dependency> 
+    <dependency>
+      <groupId>net.chrislehmann</groupId>
+      <artifactId>android-database-helper</artifactId>
+      <type>apklib</type>
+      <version>${version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+    </dependency>
+  </dependencies>
+</project>

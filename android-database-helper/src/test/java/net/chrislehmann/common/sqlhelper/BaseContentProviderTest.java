@@ -15,7 +15,7 @@ public class BaseContentProviderTest {
     }
 
     @Test
-    public void testOnCreateCallsSuper() throws Exception {
+    public void testOnCreate_callsSuper() throws Exception {
         contentProvider.onCreate();
     }
 }
