@@ -6,7 +6,7 @@
     <uses-library android:name="android.test.runner" />
   </application>
 
-  <instrumentation android:targetPackage="net.chrislehmann.common.sqlhelper"
+  <instrumentation android:targetPackage="net.chrislehmann.common.sqlhelper.test"
     android:name="android.test.InstrumentationTestRunner" />
 
 </manifest>

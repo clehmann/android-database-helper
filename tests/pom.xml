@@ -8,7 +8,8 @@
     <artifactId>android-database-helper-parent</artifactId>
     <version>1</version>
     <relativePath>../pom.xml</relativePath>
-  </parent> 
+  </parent>
+
   <groupId>net.chrislehmann</groupId>
   <artifactId>android-database-helper-it</artifactId>
   <version>${version}</version>
