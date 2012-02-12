@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -20,6 +21,10 @@ public class Table {
     private Context context;
     private static final String LOGTAG = "Table";
 
+    public Table(String name, Context context) {
+        this(name, null, context);
+    }
+
     public Table(String name, DatabaseHelper databaseHelper, Context context) {
         this.name = name;
         this.databaseHelper = databaseHelper;
@@ -30,6 +35,7 @@ public class Table {
     }
 
     public String getCreateString() {
+        Log.d(LOGTAG, "columns: " + columnList);
         String sql = "create table " + name;
         if (columnList.size() > 0) {
             sql += "( ";
@@ -41,6 +47,8 @@ public class Table {
             sql = StringUtils.removeEnd(sql, COLUMN_DEFINITION_SEPERATOR);
             sql += " )";
         }
+        Log.d(LOGTAG, "Create table sql: " + sql);
+
         return sql;
     }
 
@@ -52,6 +60,7 @@ public class Table {
     }
 
     public Table addColumn(Column column) {
+        Log.d(LOGTAG, "Added column " + column.getName());
         columnList.add(column);
         return this;
     }
@@ -83,5 +92,7 @@ public class Table {
         return numUpdated;
     }
 
-
+    public void setDatabaseHelper(DatabaseHelper databaseHelper) {
+        this.databaseHelper = databaseHelper;
+    }
 }

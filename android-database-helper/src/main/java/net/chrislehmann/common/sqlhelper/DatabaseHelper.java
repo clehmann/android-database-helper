@@ -21,7 +21,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void addTable(Table table) {
         Log.d(LOGTAG, "Adding table " + table.getName());
-        tables.add(table);
+        if (!tables.contains(table)) {
+            tables.add(table);
+        }
+        table.setDatabaseHelper(this);
     }
 
     @Override

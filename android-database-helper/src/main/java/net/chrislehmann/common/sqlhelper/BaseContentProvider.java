@@ -13,15 +13,15 @@ public class BaseContentProvider extends ContentProvider {
 
     private Integer matchNo = 0;
     protected DatabaseHelper databaseHelper;
-    protected String tableName;
-    protected int version = 1;
+    protected String databaseName;
+    protected int version = 2;
+    protected String authority;
 
     private Map<Integer, String> indicatorToContentTypeMap = new HashMap<Integer, String>();
     private Map<Integer, Table> indicatorToTableMap = new HashMap<Integer, Table>();
 
     private UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    private String authority;
 
     public Table getTableForUri(Uri theUri) {
         Integer match = uriMatcher.match(theUri);
@@ -36,12 +36,13 @@ public class BaseContentProvider extends ContentProvider {
         indicatorToContentTypeMap.put(matchNo, contentType);
         indicatorToTableMap.put(matchNo, table);
         uriMatcher.addURI(authority, uri, matchNo);
+        databaseHelper.addTable(table);
         matchNo++;
     }
 
     @Override
     public boolean onCreate() {
-        databaseHelper = new DatabaseHelper(getContext(), tableName, version);
+        databaseHelper = new DatabaseHelper(getContext(), databaseName, version);
         return true;
     }
 
