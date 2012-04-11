@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class Table {
             this.selectionString = selectionString;
             this.values = values;
         }
+
+        public SelectionCriteria() {}
 
         public String getSelectionString() {
             return selectionString;
@@ -71,7 +74,10 @@ public class Table {
     }
 
 
-    public static <T extends Object> SelectionCriteria createSelectionCriteria(T... values) {
+    public static <T extends Object> SelectionCriteria createAndSelectionCriteria(T... values) {
+        return createSelectionCriteria("AND", values);
+    }
+    public static <T extends Object> SelectionCriteria createSelectionCriteria(String operator, T... values) {
         List<String> colNames = new ArrayList<String>();
         List<String> valueStrings = new ArrayList<String>();
         for (int i = 0; i < values.length; i += 2) {
@@ -81,9 +87,30 @@ public class Table {
             valueStrings.add(value.toString());
         }
 
-        return new SelectionCriteria(StringUtils.join(colNames, " AND "), valueStrings.toArray(new String[]{}));
+        return new SelectionCriteria(StringUtils.join(colNames, " " + operator + " "), valueStrings.toArray(new String[]{}));
     }
 
+    public static <T extends Object> SelectionCriteria appendSelectionCriteria(SelectionCriteria existingSelectionCriteria, String operator, T... values) {
+        SelectionCriteria newCriteria = createSelectionCriteria(operator, values);
+        String selectionString = existingSelectionCriteria.getSelectionString() + " " + operator + " " + newCriteria.getSelectionString();
+        String seperator = " " + operator + " ";
+        if( selectionString.startsWith(seperator) ){
+            selectionString = newCriteria.getSelectionString();
+        }
+        if( selectionString.endsWith(seperator)){
+            selectionString = existingSelectionCriteria.getSelectionString();
+        }
+        return new SelectionCriteria(
+                selectionString,
+                (String[]) ArrayUtils.addAll(existingSelectionCriteria.getValues(), newCriteria.getValues())
+        );
+
+    }
+
+
+    public static String getStringValue(Column column, Cursor cursor){
+        return cursor.getString(cursor.getColumnIndex(column.getName()));
+    }
     public String getCreateString() {
         Log.d(LOGTAG, "columns: " + columnList);
         String sql = "create table " + name;
