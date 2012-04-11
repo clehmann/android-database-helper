@@ -38,6 +38,10 @@ public class Column {
         return name;
     }
 
+    public boolean isPrimaryKey() {
+        return primaryKey;
+    }
+
     public enum Type {
         INTEGER("integer"), STRING("text");
         private String typeString;
@@ -47,4 +51,8 @@ public class Column {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
 }

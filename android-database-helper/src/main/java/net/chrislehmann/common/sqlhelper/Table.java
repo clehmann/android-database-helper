@@ -25,6 +25,24 @@ public class Table {
         this(name, null, context);
     }
 
+    public static class SelectionCriteria{
+        private String selectionString = "";
+        private String[] values = {};
+
+        public SelectionCriteria(String selectionString, String[] values) {
+            this.selectionString = selectionString;
+            this.values = values;
+        }
+
+        public String getSelectionString() {
+            return selectionString;
+        }
+
+        public String[] getValues() {
+            return values;
+        }
+    }
+
     public Table(String name, DatabaseHelper databaseHelper, Context context) {
         this.name = name;
         this.databaseHelper = databaseHelper;
@@ -32,6 +50,38 @@ public class Table {
             databaseHelper.addTable(this);
         }
         this.context = context;
+    }
+
+    public static <T extends  Object> ContentValues createContentValues(T ... values){
+        ContentValues contentValues = new ContentValues();
+        for(int i = 0; i < values.length; i+=2){
+            Column column = (Column) values[i];
+            Object value = values[i + 1];
+            if( value instanceof  String ){
+                contentValues.put(column.getName(), (String) value);
+            } else  if (value instanceof Integer){
+                contentValues.put(column.getName(), (Integer) value);
+            }else  if (value instanceof Long){
+                contentValues.put(column.getName(), (Long) value);
+            }else  if (value instanceof Boolean ){
+                contentValues.put(column.getName(), (Boolean) value);
+            }
+        }
+        return  contentValues;
+    }
+
+
+    public static <T extends Object> SelectionCriteria createSelectionCriteria(T... values) {
+        List<String> colNames = new ArrayList<String>();
+        List<String> valueStrings = new ArrayList<String>();
+        for (int i = 0; i < values.length; i += 2) {
+            Column column = (Column) values[i];
+            Object value = values[i + 1];
+            colNames.add(column.getName() + " = ?");
+            valueStrings.add(value.toString());
+        }
+
+        return new SelectionCriteria(StringUtils.join(colNames, " AND "), valueStrings.toArray(new String[]{}));
     }
 
     public String getCreateString() {
@@ -52,17 +102,15 @@ public class Table {
         return sql;
     }
 
-
     public void beforeCreate(SQLiteDatabase db) {
     }
 
     public void afterCreate(SQLiteDatabase db) {
     }
 
-    public Table addColumn(Column column) {
+    public void addColumn(Column column) {
         Log.d(LOGTAG, "Added column " + column.getName());
         columnList.add(column);
-        return this;
     }
 
     public String getName() {
@@ -72,7 +120,6 @@ public class Table {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         return databaseHelper.getReadableDatabase().query(getName(), projection, selection, selectionArgs, null, null, sortOrder);
     }
-
 
     public Uri insert(Uri uri, ContentValues values) {
         long id = databaseHelper.getWritableDatabase().insertOrThrow(getName(), "ID", values);
