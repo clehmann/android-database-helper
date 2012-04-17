@@ -111,6 +111,11 @@ public class Table {
     public static String getStringValue(Column column, Cursor cursor){
         return cursor.getString(cursor.getColumnIndex(column.getName()));
     }
+
+    public static Integer getIntValue(Column column, Cursor cursor){
+        return cursor.getInt(cursor.getColumnIndex(column.getName()));
+    }
+
     public String getCreateString() {
         Log.d(LOGTAG, "columns: " + columnList);
         String sql = "create table " + name;
