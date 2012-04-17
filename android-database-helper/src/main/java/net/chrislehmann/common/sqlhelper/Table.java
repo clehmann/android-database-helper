@@ -26,26 +26,6 @@ public class Table {
         this(name, null, context);
     }
 
-    public static class SelectionCriteria{
-        private String selectionString = "";
-        private String[] values = {};
-
-        public SelectionCriteria(String selectionString, String[] values) {
-            this.selectionString = selectionString;
-            this.values = values;
-        }
-
-        public SelectionCriteria() {}
-
-        public String getSelectionString() {
-            return selectionString;
-        }
-
-        public String[] getValues() {
-            return values;
-        }
-    }
-
     public Table(String name, DatabaseHelper databaseHelper, Context context) {
         this.name = name;
         this.databaseHelper = databaseHelper;
@@ -55,66 +35,6 @@ public class Table {
         this.context = context;
     }
 
-    public static <T extends  Object> ContentValues createContentValues(T ... values){
-        ContentValues contentValues = new ContentValues();
-        for(int i = 0; i < values.length; i+=2){
-            Column column = (Column) values[i];
-            Object value = values[i + 1];
-            if( value instanceof  String ){
-                contentValues.put(column.getName(), (String) value);
-            } else  if (value instanceof Integer){
-                contentValues.put(column.getName(), (Integer) value);
-            }else  if (value instanceof Long){
-                contentValues.put(column.getName(), (Long) value);
-            }else  if (value instanceof Boolean ){
-                contentValues.put(column.getName(), (Boolean) value);
-            }
-        }
-        return  contentValues;
-    }
-
-
-    public static <T extends Object> SelectionCriteria createAndSelectionCriteria(T... values) {
-        return createSelectionCriteria("AND", values);
-    }
-    public static <T extends Object> SelectionCriteria createSelectionCriteria(String operator, T... values) {
-        List<String> colNames = new ArrayList<String>();
-        List<String> valueStrings = new ArrayList<String>();
-        for (int i = 0; i < values.length; i += 2) {
-            Column column = (Column) values[i];
-            Object value = values[i + 1];
-            colNames.add(column.getName() + " = ?");
-            valueStrings.add(value.toString());
-        }
-
-        return new SelectionCriteria(StringUtils.join(colNames, " " + operator + " "), valueStrings.toArray(new String[]{}));
-    }
-
-    public static <T extends Object> SelectionCriteria appendSelectionCriteria(SelectionCriteria existingSelectionCriteria, String operator, T... values) {
-        SelectionCriteria newCriteria = createSelectionCriteria(operator, values);
-        String selectionString = existingSelectionCriteria.getSelectionString() + " " + operator + " " + newCriteria.getSelectionString();
-        String seperator = " " + operator + " ";
-        if( selectionString.startsWith(seperator) ){
-            selectionString = newCriteria.getSelectionString();
-        }
-        if( selectionString.endsWith(seperator)){
-            selectionString = existingSelectionCriteria.getSelectionString();
-        }
-        return new SelectionCriteria(
-                selectionString,
-                (String[]) ArrayUtils.addAll(existingSelectionCriteria.getValues(), newCriteria.getValues())
-        );
-
-    }
-
-
-    public static String getStringValue(Column column, Cursor cursor){
-        return cursor.getString(cursor.getColumnIndex(column.getName()));
-    }
-
-    public static Integer getIntValue(Column column, Cursor cursor){
-        return cursor.getInt(cursor.getColumnIndex(column.getName()));
-    }
 
     public String getCreateString() {
         Log.d(LOGTAG, "columns: " + columnList);
