@@ -6,7 +6,7 @@
     <artifactId>android-database-helper</artifactId>
     <packaging>jar</packaging>
     <name>Android Database Helper</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
 
     <dependencies>

@@ -15,8 +15,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     java.util.List<net.chrislehmann.common.sqlhelper.Table> tables = new java.util.ArrayList<net.chrislehmann.common.sqlhelper.Table>();
     private static final String LOGTAG = DatabaseHelper.class.getSimpleName();
 
-    public DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    public DatabaseHelper(Context context, String dbName, int dbVersion ) {
+        super(context, dbName, null, dbVersion);
         Log.d(LOGTAG, "Created DatabaseHelper");
     }
 
