@@ -63,17 +63,24 @@ public class BaseContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return getTableForUri(uri).insert(uri, values);
-    }
-
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return getTableForUri(uri).delete(uri, selection, selectionArgs);
+        Uri newUri = getTableForUri(uri).insert(uri, values);
+        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(newUri, null);
+        return newUri;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return getTableForUri(uri).update(uri, values, selection, selectionArgs);
+        int numUpdated = getTableForUri(uri).update(uri, values, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return numUpdated;
+    }
+
+    @Override
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int numDeleted =  getTableForUri(uri).delete(uri, selection, selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return numDeleted;
     }
 
     public void setAuthority(String authority) {
