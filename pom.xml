@@ -3,20 +3,47 @@
   <modelVersion>4.0.0</modelVersion>
 
   <properties>
-    <version>2.1.0-SNAPSHOT</version>
     <android.version>2.2.1</android.version>
   </properties>
 
   <groupId>net.chrislehmann</groupId>
-  <artifactId>android-database-helper-parent</artifactId>
-  <packaging>pom</packaging>
-  <version>1</version>
+  <artifactId>android-database-helper</artifactId>
+  <packaging>apklib</packaging>
+  <version>2.1.0</version>
   <name>Android database helper</name>
 
-  <modules>
-    <module>android-database-helper</module>
-    <module>tests</module>
-  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>${android.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android-test</artifactId>
+      <version>2.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>1.8.5</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
