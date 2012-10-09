@@ -8,7 +8,7 @@
 
   <groupId>net.chrislehmann</groupId>
   <artifactId>android-database-helper</artifactId>
-  <packaging>apklib</packaging>
+  <packaging>jar</packaging>
   <version>2.1.0</version>
   <name>Android database helper</name>
 
